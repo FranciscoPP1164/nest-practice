@@ -7,9 +7,10 @@ import {
 import { AuthMiddleware } from './middlewares/auth/auth.middleware';
 import { CatsModule } from './cats/cats.module';
 import { CatsController } from './cats/cats.controller';
+import { DogsModule } from './dogs/dogs.module';
 
 @Module({
-  imports: [CatsModule],
+  imports: [CatsModule, DogsModule],
   controllers: [],
   providers: [],
 })
