@@ -12,12 +12,27 @@ import { logger } from './middlewares/logger/logger.middleware';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles/roles.guard';
 import { ConfigModule } from './config/config.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 const MyService = {};
 
 //The principal module of the application, here we import all of the modules and configure middlewares
 @Module({
-  imports: [CatsModule, DogsModule, ConfigModule],
+  imports: [
+    CatsModule,
+    DogsModule,
+    ConfigModule,
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: 'root',
+      database: 'nest_practice_db',
+      synchronize: true,
+      autoLoadEntities: true,
+    }),
+  ],
   controllers: [],
   providers: [
     //We can register global guards to a module this way if the guard implement a Dependency that must be injected

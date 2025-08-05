@@ -17,12 +17,12 @@ import {
 } from '@nestjs/common';
 import { CreateCatDto } from 'src/cats/dto/create-cat.dto';
 import { UpdateCatDto } from 'src/cats/dto/update-cat.dto';
-import { Cat } from 'src/cats/interfaces/cat';
 import { CatsService } from 'src/cats/cats.service';
 import { AuthGuard } from 'src/guards/auth/auth.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles/roles.guard';
 import { HttpExceptionFilter } from 'src/filters/http-exception/http-exception.filter';
+import { Cat } from './entities/cat.entity';
 
 //The controllers are the handlers who receibes the incoming request, each method of a controller class is a controller method who handle a route
 //The controllers support Dependency injection
@@ -44,8 +44,8 @@ export class CatsController {
   findAll(
     @Query('age', new DefaultValuePipe(0), ParseIntPipe) age: number,
     @Query('breed') breed: string,
-  ): string {
-    return `finded all cats filtereds by ${age} and ${breed}!`;
+  ): Promise<Cat[]> {
+    return this.catsService.findAll();
   }
 
   @Get('error')
@@ -67,19 +67,17 @@ export class CatsController {
   //The pipes are classes anotateds with the @Injectable() decorator, which implements the PipeTransform interface.
   //The pipes able us to transform or validate the incoming data in the parameters from a incoming request
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: string): string {
-    console.log(id);
-
-    return `find the cat with id ${id}`;
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Cat | null> {
+    return this.catsService.findOne(id);
   }
 
   //We can specify the structure of the espected body with the dto's
   //With a custom decorator we can attach metadata to the handler or the class controller, this metadata can be accesed by the ExecutionContext
   @Post()
   @Roles(['admin'])
-  create(@Body() createCatDto: CreateCatDto): Cat {
-    const newCat = this.catsService.create(createCatDto);
-    return newCat;
+  create(@Body() createCatDto: CreateCatDto) {
+    // const newCat = this.catsService.create(createCatDto);
+    // return newCat;
   }
 
   //With the UsePipes decorator we can add a pipe to a request handler
@@ -93,7 +91,7 @@ export class CatsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return `This action removes a #${id} cat`;
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.catsService.remove(id);
   }
 }

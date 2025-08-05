@@ -1,20 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from 'src/cats/interfaces/cat';
 import { CreateCatDto } from './dto/create-cat.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Cat } from './entities/cat.entity';
+import { Repository } from 'typeorm';
 
 //Services contains the business logic and can be injected in the providers of a module
 //When a module provide a service this can be used in his components with depency injection
 @Injectable()
 export class CatsService {
-  private readonly cats: Cat[] = [];
+  constructor(@InjectRepository(Cat) private catsRepository: Repository<Cat>) {}
 
-  create(cat: CreateCatDto): Cat {
-    this.cats.push(cat);
-    console.log(this.cats);
-    return cat;
+  findAll(): Promise<Cat[]> {
+    return this.catsRepository.find();
   }
 
-  findAll(): Cat[] {
-    return this.cats;
+  findOne(id: number): Promise<Cat | null> {
+    return this.catsRepository.findOneBy({ id });
   }
+
+  async remove(id: number): Promise<void> {
+    await this.catsRepository.delete(id);
+  }
+
+  // create(cat: CreateCatDto): Cat {
+  //   const newCat = this.catRepository.create(cat);
+  //   this.catRepository.save(newCat);
+  // }
 }
