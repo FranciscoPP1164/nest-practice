@@ -7,5 +7,7 @@ import { CatsService } from './cats.service';
   controllers: [CatsController],
   //The providers are all of class that
   providers: [CatsService],
+  //With exports we can export components from a module to another one
+  exports: [CatsService],
 })
 export class CatsModule {}

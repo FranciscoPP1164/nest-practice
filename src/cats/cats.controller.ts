@@ -14,7 +14,6 @@ import {
   Query,
   UseFilters,
   UseGuards,
-  UsePipes,
 } from '@nestjs/common';
 import { CreateCatDto } from 'src/cats/dto/create-cat.dto';
 import { UpdateCatDto } from 'src/cats/dto/update-cat.dto';
@@ -24,7 +23,6 @@ import { AuthGuard } from 'src/guards/auth/auth.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles/roles.guard';
 import { HttpExceptionFilter } from 'src/filters/http-exception/http-exception.filter';
-import { ValidationPipe } from 'src/pipes/validation/validation.pipe';
 
 //The controllers are the handlers who receibes the incoming request, each method of a controller class is a controller method who handle a route
 //The controllers support Dependency injection
@@ -87,7 +85,7 @@ export class CatsController {
   //With the UsePipes decorator we can add a pipe to a request handler
   //When we use the UsePipes directive, the pipe will be applied to each param of the handler
   @Put(':id')
-  @UsePipes(ValidationPipe)
+  // @UsePipes(ValidationPipe)
   update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
     console.log(updateCatDto);
 
