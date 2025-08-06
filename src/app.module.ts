@@ -13,15 +13,14 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles/roles.guard';
 import { ConfigModule } from './config/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PostModule } from './post/post.module';
+import { UsersModule } from './users/users.module';
 
 const MyService = {};
 
 //The principal module of the application, here we import all of the modules and configure middlewares
 @Module({
   imports: [
-    CatsModule,
-    DogsModule,
-    ConfigModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -32,6 +31,11 @@ const MyService = {};
       synchronize: true,
       autoLoadEntities: true,
     }),
+    CatsModule,
+    DogsModule,
+    ConfigModule,
+    PostModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [
