@@ -15,6 +15,7 @@ import { ConfigModule } from './config/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModule } from './post/post.module';
 import { UsersModule } from './users/users.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 const MyService = {};
 
@@ -31,6 +32,7 @@ const MyService = {};
       synchronize: true,
       autoLoadEntities: true,
     }),
+    ScheduleModule.forRoot(),
     CatsModule,
     DogsModule,
     ConfigModule,

@@ -3,6 +3,7 @@ import { CreateCatDto } from './dto/create-cat.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cat } from './entities/cat.entity';
 import { Repository } from 'typeorm';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 //Services contains the business logic and can be injected in the providers of a module
 //When a module provide a service this can be used in his components with depency injection
@@ -20,6 +21,13 @@ export class CatsService {
 
   async remove(id: number): Promise<void> {
     await this.catsRepository.delete(id);
+  }
+
+  @Cron(CronExpression.EVERY_10_SECONDS, {
+    name: 'myCronJob',
+  })
+  handleCron() {
+    console.log('Called every 10 seconds');
   }
 
   // create(cat: CreateCatDto): Cat {
